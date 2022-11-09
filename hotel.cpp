@@ -1,6 +1,11 @@
 #include <iostream>
+#include <fstream>
 
-using namespace std;
+
+using std::cin;
+using std::string;
+using std::cout;
+using std::endl;
 
 //Create object and class about the room
 
@@ -29,16 +34,16 @@ void user_selection2(int user_select2) {
     Room triple("sdadasdas", 43, "Inavlid");
     Room penta("sdadasdas", 54, "Inavlid");
 
-    cout << "Your type of room: " << endl << endl;
+    cout << "Your type of room: " << "\n\n";
 
     if(user_select2 == 1) {
-        cout << single.description << endl;
-        cout << single.price << endl;
-        cout << single.images << endl;
+        cout << single.description << "\n";
+        cout << single.price << "\n";
+        cout << single.images << "\n";
     }
     else if(user_select2 == 2) {
-        cout << double_room.description << endl;
-        cout << double_room.price << endl;
+        cout << double_room.description << "\n";
+        cout << double_room.price << "\n";
         cout << double_room.images << endl;
     }
     else if(user_select2 == 3) {
@@ -74,55 +79,66 @@ void type_of_room() {
     user_selection2(user_select2);
 
 }
-// To return to main menu
-int menu() {
-    int user_enter;
-    cout << "Select your option: " << endl;
-    cout << endl;
 
-    cout << "1.Sign in" << endl;
-    cout << "2.View Rooms" << endl;
-    cout << "3.Register" << "\n\n";
-    cout << "----------------------------" << "\n";
-    cin >> user_enter;
-    
-    // Cal function select
-    if(user_enter == 2) {
-        
-        type_of_room();
-    }
-
-    return 0;
-}
 //Sign in 
+class user{
+    private:
+        string user_name;
 
- int sign_in() {
-    int exit;
-    string username;
+    public:
+    void get_user_information() {
+        std::fstream file;
+        file.open("pass.dat", std::ios::in);
+        file >> user_name;
+        file.close();
+    }
+    void check_password(string pass, string username) {
+        if((user_name.find(pass) != std::string::npos) && (user_name.find(username) != std::string::npos)) {
+            cout << "Congratulation";
+        }
+        else cout <<"Wrong username or password";
+
+    }
+    
+    
+};
+
+ int sign_up() {
+    string user_name;
     string password;
-    cout<< "Username: ";
-    cin >> username;
-    cout << "Password: ";
+    cout << "Enter username: " << "\n";
+    cin >> user_name;
+    cout << "Enter password: " << "\n";
     cin >> password;
-
-    cout << "Continue? Press 1" << endl;
-    cout << "Exit? Press 2" << endl;
-    cin >> exit;
-
-    if(exit == 1) {
-        type_of_room();
+    std:: fstream file;
+    file.open("pass.dat", std::ios::out);
+    if(!file) {
+        std::cerr << "error to open file";
     }
-    else if(exit == 2) {
-        menu();
-    }
-    return 0;
+   file << user_name;
+   file << password; 
+   file.close();
+   return 0;
 }
 
+void sign_in() {
+    user client;
+    string pass;
+    string username;
+    cout << "Please enter your username: " <<"\n\n" <<"------------------------------\n";
+    cin >> username;
+    cout << "Please enter your password: " <<"\n\n" <<"------------------------------\n";
+    cin >> pass;
+    client.get_user_information();
+    client.check_password(pass, username);
+}
 
 int main() {
+    cout << "----------------------" << endl << endl;
+    cout << "Created by Minh Dinh" <<endl << endl;
+    cout << "---------------------" << endl << endl;
     int user_enter;
-    cout << "Select your option: " << endl;
-    cout << endl;
+    cout << "Select your option: " << endl<<endl;
 
     cout << "1.Sign in" << endl;
     cout << "2.View Rooms" << endl;
@@ -134,10 +150,14 @@ int main() {
     if(user_enter == 2) {
         
         type_of_room();
+    }
+    else if(user_enter == 3) {
+        sign_up();
     }
     else if(user_enter == 1) {
         sign_in();
     }
 
+    
     return 0;
 }
